@@ -37,9 +37,7 @@ func main() {
 	// Запуск приложения
 	srv := server.NewApp(myDB).Run(cfg)
 
-	// Wait for interrupt signal to gracefully shutdown the server with
-	// a timeout of 5 seconds.
-	quit := make(chan os.Signal)
+	quit := make(chan os.Signal, 1)
 
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
@@ -50,12 +48,9 @@ func main() {
 	if err := srv.Shutdown(ctx); err != nil {
 		log.Fatal("Server Shutdown:", err)
 	}
-	// catching ctx.Done(). timeout of 5 seconds.
-	select {
-	case <-ctx.Done():
-		log.Println("timeout of 5 seconds.")
-	}
 
+	<-ctx.Done()
+	log.Println("timeout of 5 seconds.")
 	log.Println("Server exiting")
 }
 
@@ -63,7 +58,7 @@ func main() {
 func connectToDB(cfg *config.Config) (*sql.DB, error) {
 	var err error
 
-	sqlDb, err := sql.Open("postgres", cfg.PG.URL) // для запуска в docker использовать cfg.PG.URL
+	sqlDb, err := sql.Open("postgres", cfg.PG.URLLocal) // для запуска в docker использовать cfg.PG.URL
 	if err != nil {
 		return nil, err // Возвращаем ошибку, если не удается создать соединение
 	}
