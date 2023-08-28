@@ -264,6 +264,14 @@ func (db *DB) UpdateUserSegments(userID int, addList []models.Segment, removeLis
 		); err != nil {
 			return 0, fmt.Errorf("failed to add segment '%s': %w", segment.Slug, err)
 		}
+
+		if _, err = tx.Exec(
+			"INSERT INTO user_segment_history(user_id, segment_slug, operation, operation_date) VALUES($1, $2, 'add', NOW())",
+			userID,
+			segment.Slug,
+		); err != nil {
+			return 0, fmt.Errorf("failed to add history record for segment '%s': %w", segment.Slug, err)
+		}
 	}
 
 	// Удаляем сегменты
@@ -282,6 +290,14 @@ func (db *DB) UpdateUserSegments(userID int, addList []models.Segment, removeLis
 			slug,
 		); err != nil {
 			return 0, fmt.Errorf("failed to remove segment '%s': %w", slug, err)
+		}
+
+		if _, err = tx.Exec(
+			"INSERT INTO user_segment_history(user_id, segment_slug, operation, operation_date) VALUES($1, $2, 'remove', NOW())",
+			userID,
+			slug,
+		); err != nil {
+			return 0, fmt.Errorf("failed to add history record for segment '%s': %w", slug, err)
 		}
 	}
 

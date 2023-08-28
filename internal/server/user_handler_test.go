@@ -1,4 +1,4 @@
-package app
+package server
 
 import (
 	"bytes"
@@ -43,7 +43,7 @@ func TestUserHandlers(t *testing.T) {
 			mockSetup: func() {
 				mockDB.EXPECT().CreateUser("John").Return(int64(1), nil)
 			},
-			expectedCode: http.StatusOK,
+			expectedCode: http.StatusCreated,
 			expectedBody: map[string]interface{}{
 				"message": "User created successfully",
 				"user_id": float64(1),

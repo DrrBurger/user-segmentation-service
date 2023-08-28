@@ -1,4 +1,4 @@
-package app
+package server
 
 import (
 	"github.com/gin-gonic/gin"
@@ -24,7 +24,7 @@ func (a *App) createUserHandler(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"message": "User created successfully", "user_id": userID})
+	ctx.JSON(http.StatusCreated, gin.H{"message": "User created successfully", "user_id": userID})
 }
 
 // deleteUserHandler удаляет пользователя по ID, полученному из JSON.

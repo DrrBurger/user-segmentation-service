@@ -11,7 +11,7 @@ services:
       - HTTP_ADDR=:8080
       - LOG_LEVEL=debug
       - PG_URL=postgres://postgres:qwerty@postgres:5432/segmentation?sslmode=disable
-      - CONFIG_PATH=/go/src/app/config/config.yml
+      - CONFIG_PATH=/go/src/server/config/config.yml
     build: ./
     command: >
       /bin/sh -c "

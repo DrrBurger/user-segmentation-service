@@ -1,7 +1,10 @@
-package app
+package server
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
+	"log"
+	"net/http"
 	"user-segmentation-service/config"
 	"user-segmentation-service/internal/db"
 )
@@ -17,13 +20,22 @@ func NewApp(db db.InterfaceDB) *App {
 }
 
 // Run запускает приложение
-func (a *App) Run(cfg *config.Config) error {
-	r := a.setupRouter()        // Настройка маршрутизации
-	err := r.Run(cfg.HTTP.Port) // Запуск сервера на определенном порту
-	if err != nil {
-		return err // Завершение программы, если не удаётся запустить сервер T
+func (a *App) Run(cfg *config.Config) *http.Server {
+	r := a.setupRouter() // Настройка маршрутизации
+
+	srv := &http.Server{
+		Addr:    cfg.HTTP.Port,
+		Handler: r,
 	}
-	return nil
+
+	go func() {
+		// service connections
+		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Fatalf("listen: %s\n", err)
+		}
+	}()
+
+	return srv
 }
 
 // setupRouter настраивает маршрутизацию для приложения
@@ -46,4 +58,5 @@ func (a *App) setupRouter() *gin.Engine {
 func respondWithError(ctx *gin.Context, status int, message string) {
 	ctx.JSON(status, gin.H{"error": message}) // Отправка JSON ответа с кодом ошибки и сообщением
 	ctx.Abort()                               // Прекращение обработки текущего запроса
+	log.Println(ctx.Request.RequestURI, status, message)
 }
