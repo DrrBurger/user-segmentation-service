@@ -159,7 +159,7 @@ func (db *DB) CreateSegment(slug string, randomPercentage float64, expirationDat
 		return fmt.Errorf("failed to add users to segment: %w", err)
 	}
 
-	// Логирование операции добавления
+	// Запись в историю
 	_, err = tx.Exec(
 		`INSERT INTO user_segment_history(user_id, segment_slug, operation)
          SELECT id, $1, 'add' FROM temp_users`,

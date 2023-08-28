@@ -5,9 +5,9 @@
 package mocks
 
 import (
-	models "user-segmentation-service/internal/models"
 	reflect "reflect"
 	time "time"
+	models "user-segmentation-service/internal/models"
 
 	gomock "github.com/golang/mock/gomock"
 )
