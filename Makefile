@@ -10,15 +10,15 @@ migrate-down:
 
 ## build: Билдит бинарный файл
 build:
-	go build -o bin/app -v cmd/resttest/main.go
+	go build -o bin/app -v cmd/segmentation-service/main.go
 
 ## dc: Докер компоуз билд
 dc:
 	docker-compose up --remove-orphans --build
 
-## run: Запускает app нативно
+## run_serv: Запускает сервер grpc
 run:
-	go run cmd/resttest/main.go
+	go run cmd/segmentation-service//main.go
 
 ## clean: Очищяет и удаляет бинарный файл
 clean:
@@ -41,6 +41,7 @@ cover:
 	go tool cover -func=coverage.out
 	rm coverage.out
 
+
 ## fmt: Форматирование кода для соответствия стандартному стилю Go
 fmt:
 	go fmt ./...
@@ -54,7 +55,7 @@ lint:
 	golangci-lint run
 
 help: Makefile
-	@echo " Choose a command run in "RESTtest":"
+	@echo " Choose a command run in "user-segmentation-service":"
 	@sed -n 's/^##//p' $< | column -t -s ':' |  sed -e 's/^/ /'
 
 

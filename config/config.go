@@ -8,6 +8,7 @@ import (
 
 type (
 	Config struct {
+		Env string `yaml:"local"`
 		HTTP
 		Log
 		PG
@@ -24,12 +25,12 @@ type (
 
 	PG struct {
 		URL      string `env:"PG_URL"`
+		URLLocal string `env:"PG_URL_LOCAL"`
 		Host     string `env:"POSTGRES_HOST"`
 		Port     string `env:"POSTGRES_PORT"`
 		User     string `env:"POSTGRES_USER"`
 		Password string `env:"POSTGRES_PASSWORD"`
 		DBName   string `env:"POSTGRES_DB"`
-		ConnStr  string `env:"CONN_STRING"`
 	}
 
 	Hasher struct {

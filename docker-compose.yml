@@ -6,12 +6,18 @@ networks:
 services:
 
   rest-api:
+    restart: on-failure
     environment:
       - HTTP_ADDR=:8080
       - LOG_LEVEL=debug
-      - CONFIG_PATH=/go/src/app/config/config.yml
+      - PG_URL=postgres://postgres:qwerty@postgres:5432/segmentation?sslmode=disable
+      - CONFIG_PATH=/go/src/server/config/config.yml
     build: ./
-    command: "./user-segmentation-service"
+    command: >
+      /bin/sh -c "
+        migrate -path ./migrations -database 'postgres://postgres:qwerty@postgres:5432/segmentation?sslmode=disable' up &&
+        ./user-segmentation-service
+      "
     ports:
       - 8080:8080
     depends_on:
@@ -24,7 +30,7 @@ services:
     restart: always
     image: postgres:latest
     ports:
-      - 5433:5432
+      - 5432:5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=qwerty

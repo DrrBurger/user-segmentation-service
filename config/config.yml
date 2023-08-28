@@ -1,1 +1,12 @@
-max_pool_size: 20
+env: "local" # local, dev, prod
+
+http:
+  port: ":8080"
+
+log:
+  level: 'debug'
+
+postgres:
+  max_pool_size: 20
+
+storage_path: "host=localhost dbname=segmentation sslmode=disable"
