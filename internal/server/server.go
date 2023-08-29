@@ -58,5 +58,5 @@ func (a *App) setupRouter() *gin.Engine {
 func respondWithError(ctx *gin.Context, status int, message string) {
 	ctx.JSON(status, gin.H{"error": message}) // Отправка JSON ответа с кодом ошибки и сообщением
 	ctx.Abort()                               // Прекращение обработки текущего запроса
-	log.Println(ctx.Request.RequestURI, status, message)
+	//log.Println(ctx.Request.RequestURI, status, message)
 }

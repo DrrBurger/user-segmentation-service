@@ -58,7 +58,7 @@ func main() {
 func connectToDB(cfg *config.Config) (*sql.DB, error) {
 	var err error
 
-	sqlDb, err := sql.Open("postgres", cfg.PG.URLLocal) // для запуска в docker использовать cfg.PG.URL
+	sqlDb, err := sql.Open("postgres", cfg.PG.URL) // для запуска использовать cfg.PG.URLLocal
 	if err != nil {
 		return nil, err // Возвращаем ошибку, если не удается создать соединение
 	}
